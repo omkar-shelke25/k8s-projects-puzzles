@@ -1,0 +1,31 @@
+apiVersion: apps/v1  # Kubernetes API version for Deployments
+kind: Deployment     # Resource type (Deployment)
+metadata:
+  name: lamp-wp      # Name of the Deployment
+  labels:
+    app: lamp-wp-deployment  # Label for the Deployment
+spec:
+  replicas: 1        # Number of replicas (pods) to maintain
+  selector:
+    matchLabels:
+      app: httpd-php-mysql  # Label selector to match pods managed by this Deployment
+  template:          # Pod template for creating pods
+    metadata:
+      labels:
+        app: httpd-php-mysql  # Labels applied to the pods
+    spec:
+      volumes:       # Volumes to be mounted in the pod
+      - name: php-config-volume  # Name of the volume
+        configMap:   # Volume source (ConfigMap)
+           name: php-config  # Name of the ConfigMap to use
+      containers:
+      - name: httpd-php-container  # First container: Apache + PHP
+        image: webdevops/php-apache:alpine-3-php7  # Container image
+        ports:
+        - containerPort: 80  # Expose port 80 for HTTP traffic
+      - name: mysql-container  # Second container: MySQL
+        image: mysql:5.6       # MySQL 5.6 image
+        volumeMounts:          # Volume mounts for this container
+        - name: php-config-volume  # Mount the volume defined earlier
+          mountPath: "/opt/docker/etc/php/php.ini"  # Path to mount the file
+          subPath: "php.ini"  # Specific file from the ConfigMap to mount
