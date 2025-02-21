@@ -64,7 +64,7 @@ kubectl apply -f ConfigMaps.yaml
 Use the following command to create a Secret named `mysql-secrets1` containing MySQL credentials:  
 
 ```sh
-kubectl create secret generic mysql-secrets1 \
+kubectl create secret generic mysql-secrets \
   --from-literal=MYSQL_ROOT_PASSWORD=root \
   --from-literal=MYSQL_DATABASE=lamp_db \
   --from-literal=MYSQL_USER=omkar \
