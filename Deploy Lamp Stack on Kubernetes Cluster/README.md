@@ -78,6 +78,16 @@ This command generates a YAML file (`mysql-secrets.yaml`) with the secret config
 ```sh
 kubectl apply -f mysql-secrets.yaml
 ```
+### **Deployment:** Create `lamp-wp` deployment with two containers:  
+- **httpd-php-container** (image: `webdevops/php-apache:alpine-3-php7`), mount `php-config` at `/opt/docker/etc/php/php.ini`.  
+- **mysql-container** (image: `mysql:5.6`).  
 
+After creating the deployment file **lamp-wp-deployment.yaml**, execute the following command to apply it:  
+```sh
+kubectl apply -f lamp-wp-deployment.yaml
+```
+Both containers should now be running. 🚀
+
+now we have to create sevice to access the inde.php file
 
 k cp  /tmp/index.php lamp-wp-644b44999-lfr92:/app -c httpd-php-container 
