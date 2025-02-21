@@ -1,31 +1,85 @@
-apiVersion: apps/v1  # Kubernetes API version for Deployments
+apiVersion: apps/v1  # API version for Deployments
 kind: Deployment     # Resource type (Deployment)
 metadata:
   name: lamp-wp      # Name of the Deployment
   labels:
     app: lamp-wp-deployment  # Label for the Deployment
 spec:
-  replicas: 1        # Number of replicas (pods) to maintain
+  replicas: 1        # Number of pod replicas
   selector:
     matchLabels:
-      app: httpd-php-mysql  # Label selector to match pods managed by this Deployment
-  template:          # Pod template for creating pods
+      app: httpd-php-mysql  # Label selector for pods
+  template:          # Pod template
     metadata:
       labels:
-        app: httpd-php-mysql  # Labels applied to the pods
+        app: httpd-php-mysql  # Labels for the pod
     spec:
-      volumes:       # Volumes to be mounted in the pod
-      - name: php-config-volume  # Name of the volume
+      volumes:       # Volumes for the pod
+      - name: php-config-volume  # Volume name
         configMap:   # Volume source (ConfigMap)
-           name: php-config  # Name of the ConfigMap to use
+           name: php-config  # ConfigMap name
       containers:
       - name: httpd-php-container  # First container: Apache + PHP
         image: webdevops/php-apache:alpine-3-php7  # Container image
         ports:
-        - containerPort: 80  # Expose port 80 for HTTP traffic
+        - containerPort: 80  # Expose port 80
+        env:                # Environment variables
+        - name: MYSQL_ROOT_PASSWORD  # MySQL root password
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secrets  # Secret name
+              key: MYSQL_ROOT_PASSWORD  # Secret key
+        - name: MYSQL_DATABASE  # MySQL database name
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secrets
+              key: MYSQL_DATABASE
+        - name: MYSQL_USER  # MySQL user
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secrets
+              key: MYSQL_USER
+        - name: MYSQL_PASSWORD  # MySQL user password
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secrets
+              key: MYSQL_PASSWORD
+        - name: MYSQL_HOST  # MySQL host
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secrets
+              key: MYSQL_HOST
       - name: mysql-container  # Second container: MySQL
         image: mysql:5.6       # MySQL 5.6 image
-        volumeMounts:          # Volume mounts for this container
-        - name: php-config-volume  # Mount the volume defined earlier
-          mountPath: "/opt/docker/etc/php/php.ini"  # Path to mount the file
-          subPath: "php.ini"  # Specific file from the ConfigMap to mount
+        volumeMounts:          # Volume mounts
+        - name: php-config-volume  # Volume name
+          mountPath: "/opt/docker/etc/php/php.ini"  # Mount path
+          subPath: "php.ini"  # Specific file to mount
+        ports:
+          - containerPort: 3306  # Expose port 3306
+        env:                    # Environment variables
+        - name: MYSQL_ROOT_PASSWORD  # MySQL root password
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secrets
+              key: MYSQL_ROOT_PASSWORD
+        - name: MYSQL_DATABASE  # MySQL database name
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secrets
+              key: MYSQL_DATABASE
+        - name: MYSQL_USER  # MySQL user
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secrets
+              key: MYSQL_USER
+        - name: MYSQL_PASSWORD  # MySQL user password
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secrets
+              key: MYSQL_PASSWORD
+        - name: MYSQL_HOST  # MySQL host
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secrets
+              key: MYSQL_HOST
