@@ -115,7 +115,8 @@ Both containers should now be running. 🚀
      http://<Node-IP>:30008/index.php
      ```
      Now, your `index.php` should be accessible! 🚀
-    ![image](https://github.com/user-attachments/assets/07cb78a0-91a3-44f0-8235-c71d465b95e2)
+    ![image](https://github.com/user-attachments/assets/ea6d6f2f-408a-4c14-9d52-ec957a1dedaa)
+
 
 ### **Step 5: Verify All Running Resources**  
 
