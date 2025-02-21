@@ -79,3 +79,5 @@ This command generates a YAML file (`mysql-secrets.yaml`) with the secret config
 kubectl apply -f mysql-secrets.yaml
 ```
 
+
+k cp  /tmp/index.php lamp-wp-644b44999-lfr92:/app -c httpd-php-container 
