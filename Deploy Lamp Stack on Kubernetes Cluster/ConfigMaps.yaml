@@ -1,0 +1,10 @@
+ apiVersion: v1
+kind: ConfigMap
+metadata:
+  # ConfigMap name
+  name: php-config
+data:
+  # PHP configuration file
+  php.ini: |
+    # Set variable order for PHP
+    variables_order = "EGPCS"
