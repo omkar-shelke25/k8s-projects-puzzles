@@ -4,5 +4,5 @@ A repo with Kubernetes challenges like KodeKloud's, featuring production-style p
 
 ## Index of k8s-projects-puzzles
 
-1. [Deploy LAMP Stack on Kubernetes Cluster](./Deploy-LAMP-Stack-on-Kubernetes-Cluster/)
+1. [Deploy LAMP Stack on Kubernetes Cluster](./Deploy LAMP Stack on-Kubernetes Cluster/)
 
