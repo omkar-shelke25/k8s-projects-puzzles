@@ -78,7 +78,7 @@ This command generates a YAML file (`mysql-secrets.yaml`) with the secret config
 ```sh
 kubectl apply -f mysql-secrets.yaml
 ```
-### **Deployment:** Create `lamp-wp` deployment with two containers:  
+### step 3: **Deployment:** Create `lamp-wp` deployment with two containers:  
 - **httpd-php-container** (image: `webdevops/php-apache:alpine-3-php7`), mount `php-config` at `/opt/docker/etc/php/php.ini`.  
 - **mysql-container** (image: `mysql:5.6`).  
 
@@ -88,6 +88,50 @@ kubectl apply -f lamp-wp-deployment.yaml
 ```
 Both containers should now be running. 🚀
 
-now we have to create sevice to access the inde.php file
+### **Steps 4: Access `index.php` File in the `httpd` Container**  
 
-k cp  /tmp/index.php lamp-wp-644b44999-lfr92:/app -c httpd-php-container 
+1. **Create Services:**  
+   - `lamp-service`: Exposes the `httpd-php-container` on **NodePort 30008** for external access.  
+   - `mysql-service`: Exposes the `mysql-container` internally on **port 3306** for database connectivity.  
+
+2. **Apply the Service Configurations:**  
+   ```sh
+   kubectl apply -f lamp-service.yaml
+   kubectl apply -f mysql-service.yaml
+   ```
+
+3. **Copy `index.php` to the HTTPD Container:**  
+   ```sh
+   kubectl cp /tmp/index.php lamp-wp-644b44999-lfr92:/app -c httpd-php-container
+   ```
+
+4. **Access `index.php` in a Browser:**  
+   - Find the node’s IP using:  
+     ```sh
+     kubectl get nodes -o wide
+     ```
+   - Open the browser and navigate to:  
+     ```
+     http://<Node-IP>:30008/index.php
+     ```
+     Now, your `index.php` should be accessible! 🚀
+    ![image](https://github.com/user-attachments/assets/07cb78a0-91a3-44f0-8235-c71d465b95e2)
+
+### **Step 5: Verify All Running Resources**  
+
+Run the following command to check the status of all Kubernetes resources:  
+
+```sh
+kubectl get svc,po,configmaps,secrets
+```
+
+This will display the status of:  
+- **Services (`svc`)** – To confirm that `lamp-service` and `mysql-service` are running.  
+- **Pods (`po`)** – To ensure `lamp-wp` pods are running successfully.  
+- **ConfigMaps (`configmaps`)** – To verify `php-config` is correctly mounted.  
+- **Secrets (`secrets`)** – If any database credentials are stored as secrets.  
+
+If all resources are running correctly, your LAMP deployment is successfully set up! 🚀
+![image](https://github.com/user-attachments/assets/0fef6267-eccb-4f1e-b295-c299886bb343)
+
+
