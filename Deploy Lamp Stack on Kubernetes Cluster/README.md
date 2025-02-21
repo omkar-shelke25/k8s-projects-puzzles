@@ -43,7 +43,16 @@ Here’s a refined version with better formatting and clarity:
 Create a `ConfigMaps.yaml` file and define the `php-config` ConfigMap:  
 
 ```yaml
-
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  # ConfigMap name
+  name: php-config
+data:
+  # PHP configuration file
+  php.ini: |
+    # Set variable order for PHP
+    variables_order = "EGPCS"
 ```
 
 Apply the ConfigMap using:  
