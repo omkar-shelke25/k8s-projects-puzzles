@@ -35,3 +35,38 @@ Follow these steps to complete the deployment of the PHP website:
 
 5. **Copy index.php**  
    Copy `/tmp/index.php` from jump_host to the httpd container’s `/app` directory (e.g., via `kubectl cp` or an init container). Ensure MySQL variables in the file use environment variables, not hardcoded values.
+
+## Implmentation
+Here’s a refined version with better formatting and clarity:  
+
+### **Step 1: Define a ConfigMap for PHP Configuration**  
+Create a `ConfigMaps.yaml` file and define the `php-config` ConfigMap:  
+
+```yaml
+
+```
+
+Apply the ConfigMap using:  
+```sh
+kubectl apply -f ConfigMaps.yaml
+```
+
+### **Step 2: Create Kubernetes Secrets via CLI**  
+Use the following command to create a Secret named `mysql-secrets1` containing MySQL credentials:  
+
+```sh
+kubectl create secret generic mysql-secrets1 \
+  --from-literal=MYSQL_ROOT_PASSWORD=root \
+  --from-literal=MYSQL_DATABASE=lamp_db \
+  --from-literal=MYSQL_USER=omkar \
+  --from-literal=MYSQL_PASSWORD=pass \
+  --from-literal=MYSQL_HOST=mysql-service \
+  -o yaml > mysql-secrets.yaml
+```
+
+This command generates a YAML file (`mysql-secrets.yaml`) with the secret configuration, which can be applied later using:  
+
+```sh
+kubectl apply -f mysql-secrets.yaml
+```
+
