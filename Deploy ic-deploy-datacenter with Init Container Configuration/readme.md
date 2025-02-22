@@ -29,9 +29,6 @@ To validate this approach, the team has designed the following test scenario:
 
 ---
 
-
----
-
 # 🚀 **Kubernetes Deployment with Init Container**
 
 ## 📝 **Overview**  
