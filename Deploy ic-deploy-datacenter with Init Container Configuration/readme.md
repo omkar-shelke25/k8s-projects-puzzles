@@ -28,17 +28,27 @@ To validate this approach, the team has designed the following test scenario:
 10. Create a **volume** named **`ic-volume-nautilus`** of type **emptyDir** to enable data sharing between the init and main containers.  
 
 ---
-Workflow
-first we need create init container wih deployment. We have write deployment config file with init container we can see below code
-aafter completion init container ,in volume   Welcome to xFusionCorp Industries sentence is stored /ic/blog
-using main container we can display sentence  that create by init container. 
+Here’s your deployment YAML formatted in **Markdown** with **icons** and **comments** for clarity.  
 
+---
+
+# 🚀 **Kubernetes Deployment with Init Container**
+
+## 📝 **Overview**  
+- **Init Container** → Creates a file with the message `"Welcome to xFusionCorp Industries"`.  
+- **Main Container** → Reads and displays the message every **5 seconds**.  
+- **Shared Volume** (`emptyDir`) → Used to transfer data between the containers.
+
+---
+
+## 📜 **Deployment Configuration**
+``yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ic-deploy-nautilus 
+  name: ic-deploy-nautilus  # 🔹 Name of the deployment
 spec:
-  replicas: 1
+  replicas: 1  # 🔹 Running only 1 replica
   selector:
     matchLabels:
       app: ic-nautilus
@@ -48,24 +58,48 @@ spec:
         app: ic-nautilus
     spec:
       volumes:
-      - name: ic-volume-nautilus
-        emptyDir: {}
+        - name: ic-volume-nautilus  # 📂 Shared volume for both containers
+          emptyDir: {}  # 🔹 Temporary storage that lasts as long as the pod
+          
       initContainers:
-      - name: ic-msg-nautilus
-        image: ubuntu:latest
-        command: ['/bin/bash', '-c' ,'echo Init Done - Welcome to xFusionCorp Industries > /ic/blog']
-        volumeMounts:
-        - name: ic-volume-nautilus
-          mountPath: /ic
+        - name: ic-msg-nautilus  # 🚀 Init container (runs first)
+          image: ubuntu:latest  # 🔹 Base image
+          command: 
+            - "/bin/bash"
+            - "-c"
+            - "echo 'Init Done - Welcome to xFusionCorp Industries' > /ic/blog"  # 📝 Writes message to shared volume
+          volumeMounts:
+            - name: ic-volume-nautilus
+              mountPath: /ic  # 🔗 Mounts the shared volume
+
       containers:
-      - name: ic-main-nautilus
-        image: ubuntu:latest
-        command: ['/bin/bash','-c','while true; do cat /ic/blog; sleep 5; done']
-        volumeMounts:
-        - name: ic-volume-nautilus
-          mountPath: /ic
-while true; do cat /ic/blog; sleep 5; done
-k get deploy,po
-k logs pod/ic-deploy-nautilus-84b4cb577c-hp84c
+        - name: ic-main-nautilus  # 🏗️ Main container
+          image: ubuntu:latest
+          command:
+            - "/bin/bash"
+            - "-c"
+            - "while true; do cat /ic/blog; sleep 5; done"  # 📜 Reads and prints the message every 5 seconds
+          volumeMounts:
+            - name: ic-volume-nautilus
+              mountPath: /ic  # 🔗 Mounts the shared volume
+```
+
+---
+
+## ⚡ **Deployment Commands**
+```sh
+# 🚀 Apply the deployment
+kubectl apply -f deployment.yaml
+
+# 📌 Check deployment and pod status
+kubectl get deploy,po
+
+# 📜 Get logs of the main container (replace <POD_NAME> with actual pod name)
+kubectl logs pod/<POD_NAME>
+```
+> **💡 Tip:** Use `kubectl get pods` to find the actual pod name.
+
+---
+## OutPut ::
 
 ![image](https://github.com/user-attachments/assets/03ab1dfa-516b-40e9-90be-c63930782478)
