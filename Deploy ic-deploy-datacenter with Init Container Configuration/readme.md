@@ -28,7 +28,7 @@ To validate this approach, the team has designed the following test scenario:
 10. Create a **volume** named **`ic-volume-nautilus`** of type **emptyDir** to enable data sharing between the init and main containers.  
 
 ---
-Here’s your deployment YAML formatted in **Markdown** with **icons** and **comments** for clarity.  
+
 
 ---
 
