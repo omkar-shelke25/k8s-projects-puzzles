@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ic-deploy-nautilus
+  name: ic-deploy-nautilus 
 spec:
   replicas: 1
   selector:
@@ -25,7 +25,7 @@ spec:
       containers:
       - name: ic-main-nautilus
         image: ubuntu:latest
-        command: ['/bin/bash', '-c','while true; do cat /ic/blog; sleep 5; done']
+        command: ['/bin/bash','-c','while true; do cat /ic/blog; sleep 5; done']
         volumeMounts:
         - name: ic-volume-nautilus
           mountPath: /ic
