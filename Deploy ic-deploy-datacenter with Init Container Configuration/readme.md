@@ -42,7 +42,7 @@ To validate this approach, the team has designed the following test scenario:
 ---
 
 ## 📜 **Deployment Configuration**
-``yaml
+```yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
