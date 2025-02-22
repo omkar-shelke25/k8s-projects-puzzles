@@ -28,4 +28,44 @@ To validate this approach, the team has designed the following test scenario:
 10. Create a **volume** named **`ic-volume-nautilus`** of type **emptyDir** to enable data sharing between the init and main containers.  
 
 ---
+Workflow
+first we need create init container wih deployment. We have write deployment config file with init container we can see below code
+aafter completion init container ,in volume   Welcome to xFusionCorp Industries sentence is stored /ic/blog
+using main container we can display sentence  that create by init container. 
 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ic-deploy-nautilus 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ic-nautilus
+  template:
+    metadata:
+      labels:
+        app: ic-nautilus
+    spec:
+      volumes:
+      - name: ic-volume-nautilus
+        emptyDir: {}
+      initContainers:
+      - name: ic-msg-nautilus
+        image: ubuntu:latest
+        command: ['/bin/bash', '-c' ,'echo Init Done - Welcome to xFusionCorp Industries > /ic/blog']
+        volumeMounts:
+        - name: ic-volume-nautilus
+          mountPath: /ic
+      containers:
+      - name: ic-main-nautilus
+        image: ubuntu:latest
+        command: ['/bin/bash','-c','while true; do cat /ic/blog; sleep 5; done']
+        volumeMounts:
+        - name: ic-volume-nautilus
+          mountPath: /ic
+while true; do cat /ic/blog; sleep 5; done
+k get deploy,po
+k logs pod/ic-deploy-nautilus-84b4cb577c-hp84c
+
+![image](https://github.com/user-attachments/assets/03ab1dfa-516b-40e9-90be-c63930782478)
