@@ -41,12 +41,6 @@ Create a NodePort service named `web-devops` with the following specifications:
 
 ---
 
-# Kubernetes Deployment: Web Application with Persistent Storage
-
-## 📝 Overview
-This guide provides step-by-step instructions to deploy a web application on a Kubernetes cluster using Persistent Volumes (PV) and Persistent Volume Claims (PVC). The application is served using an Nginx container, and the deployment includes a NodePort service to expose the application.
-
----
 
 ## 🛠️ Implementation Steps
 
