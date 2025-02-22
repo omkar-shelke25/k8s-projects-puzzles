@@ -76,7 +76,7 @@ spec:
         - name: ic-main-nautilus  # 🏗️ Main container
           image: ubuntu:latest
           command:
-            - "/bin/bash"
+            - "/bin/bash" 
             - "-c"
             - "while true; do cat /ic/blog; sleep 5; done"  # 📜 Reads and prints the message every 5 seconds
           volumeMounts:
