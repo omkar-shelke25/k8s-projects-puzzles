@@ -1,34 +1,43 @@
+### 🛠️ **Task: Securely Store License Information in Kubernetes Secrets**  
 
-# 🛠️ Kubernetes Secret and Pod Deployment Task
+The **Nautilus DevOps** team is deploying tools in a Kubernetes cluster, and some tools require **license-based authentication**. To securely store license information, the team wants to utilize **Kubernetes Secrets**.  
 
-The Nautilus DevOps team is working to deploy tools in a Kubernetes cluster. Some tools require licenses, which must be stored securely using Kubernetes secrets. Below are the detailed requirements:
+---  
 
-## 📋 Task Requirements
+## 📌 **Task Details**  
 
-### 🔑 1. Create a Generic Secret
-- **Objective**: Create a secret to store license information
-- **Details**:
-  - Source file: `blog.txt` located at `/opt` on jump host
-  - Secret name: `blog`
-  - Content: Password/license-number from `blog.txt`
+### 🔐 **1. Create a Kubernetes Secret**  
+- A **secret key file** named `blog.txt` is located at `/opt/blog.txt` on the **jump host**.  
+- The file contains the following **license key/password**:  
+  ```sh
+  cat /opt/blog.txt
+  5ecur3
+  ```
+- Create a **Kubernetes Secret** named **`blog`** using the data from `blog.txt`.  
 
-### 🖥️ 2. Create a Pod
-- **Objective**: Deploy a pod to consume the secret
-- **Details**:
-  - Pod name: `secret-datacenter`
-  - Container name: `secret-container-datacenter`
-  - Image: `fedora` (use `latest` tag explicitly)
-  - Command: Use `sleep` to keep container running (e.g., `sleep infinity`)
+---
 
-### 🔗 3. Mount the Secret
-- **Objective**: Make the secret available inside the container
-- **Details**:
-  - Mount path: `/opt/games` within the container
-  - Source: Use the `blog` secret created earlier
+### 🖥️ **2. Deploy a Pod to Consume the Secret**  
+- Create a **pod** named **`secret-datacenter`**.  
+- Configure the **pod's specification** with:  
+  - **Container Name:** `secret-container-datacenter`  
+  - **Image:** `fedora:latest`  
+  - The container should run indefinitely using the `sleep` command.  
 
-### ✅ 4. Verification
-- **Steps**:
-  - Exec into the container `secret-container-datacenter`
-  - Check for the secret key at `/opt/games`
-- **Note**: Ensure the pod is in a running state before validation
+---
 
+### 📂 **3. Mount the Secret Inside the Container**  
+- The **created secret** must be **mounted** inside the **container** at the path `/opt/games`.  
+- The mounted secret should be accessible as a file inside this directory.  
+
+---
+
+### ✅ **4. Verification Steps**  
+- Once the pod is running, verify that the secret is correctly mounted by:  
+  1. **Executing into the container** and navigating to `/opt/games`.  
+  2. **Checking if the secret file exists** inside the mounted directory.  
+  3. **Reading the contents of the file** to confirm it contains the correct license key/password.  
+
+**Important Notes:**  
+✔ Ensure the **pod is in a running state** before validation.  
+✔ **Verification may take time**, so be patient before checking the task completion.  
