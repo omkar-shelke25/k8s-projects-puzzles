@@ -16,7 +16,7 @@ The Nautilus application development team identified performance issues in an ap
 
 
 ## Implementation 
-```markdown
+
 # Redis Deployment and ConfigMap Implementation 🛠️
 
 This guide outlines how to create a ConfigMap for Redis, deploy Redis with Kubernetes, and configure it with a `maxmemory` setting of 2MB. The deployment will be configured with 1 replica and 1 CPU request, and it will mount two volumes for Redis data and configuration.
