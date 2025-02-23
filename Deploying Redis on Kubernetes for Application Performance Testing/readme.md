@@ -14,3 +14,4 @@ The Nautilus application development team identified performance issues in an ap
 - **Expose port 6379 on the container.** 🌐  
 - **Ensure the redis-deployment is fully operational and running** ✅  
 
+![image](https://github.com/user-attachments/assets/6b4a25ae-4dfe-473e-a6ed-4b20faeca308)
