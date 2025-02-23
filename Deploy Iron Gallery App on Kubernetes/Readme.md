@@ -222,18 +222,24 @@ kubectl apply -f .
    ```sh
    kubectl get svc -n iron-namespace-nautilus
    ```
-3. **Check logs if needed**
-   ```sh
-   kubectl logs -f <pod-name> -n iron-namespace-nautilus
-   ```
+![image](https://github.com/user-attachments/assets/a977a8e9-980f-4fa5-bf36-fb1714b68f81)
 
 ## Accessing the Application
 - **Database (MariaDB) is only accessible within the cluster** (ClusterIP).
-- **Iron Gallery is accessible externally** using:
-  ```sh
-  minikube service iron-gallery-service-nautilus -n iron-namespace-nautilus
+  - access it `http://<node-ip>:32678`
+
+![image](https://github.com/user-attachments/assets/a5238913-f1f3-4fbe-a581-01f4ec47899c)
+- **check logs**
+  ```bash
+  k logs -n iron-namespace-nautilus pod/iron-gallery-deployment-nautilus-656db68668-wx8t8
+  k logs -n iron-namespace-nautilus pod/iron-db-deployment-nautilus-845dc8b44c-n7s5w
+  
   ```
-  OR access it via `http://<node-ip>:32678`
+    **pod/iron-gallery-deployment-nautilus-656db68668-wx8t8**
+    ![image](https://github.com/user-attachments/assets/2f931883-15e5-4219-8ab5-1f525c336e32)
+
+   **pod/iron-db-deployment-nautilus-845dc8b44c-n7s5w**
+   ![image](https://github.com/user-attachments/assets/749006e4-435b-4029-88f0-962138fac718)
 
 
 
