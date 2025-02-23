@@ -116,7 +116,6 @@ You should see a single replica of the `redis-deployment` running.
   - `redis-config`: ConfigMap volume for Redis configuration.
 - **Redis Container**: Uses `redis:alpine` image and exposes port `6379`.
 
-With this setup, you have a fully configured Redis deployment running in your Kubernetes cluster! Let me know if you need further assistance. 😊
 
 
 ---
