@@ -66,4 +66,175 @@ The Nautilus DevOps team has recently customized the Iron Gallery app and is pre
   - TargetPort: `80`
   - NodePort: `32678`
   - Type: `NodePort`
+  - 
+# Implementation: Iron Nautilus Kubernetes Deployment
+1. **Create the Kubernetes Namespace**
+   ```sh
+   kubectl create namespace iron-namespace-nautilus
+   ```
+2. **Apply the Kubernetes configurations** (see below for details).
+
+## Components
+### Namespace
+All resources are deployed under `iron-namespace-nautilus`.
+
+### Secrets
+The **mysql-secrets** resource stores MySQL credentials securely.
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysql-secrets
+  namespace: iron-namespace-nautilus
+type: Opaque
+data:
+  MYSQL_DATABASE: ZGF0YWJhc2VfYmxvZw==
+  MYSQL_HOST: aXJvbi1kYi1zZXJ2aWNlLW5hdXRpbHVz
+  MYSQL_PASSWORD: cGFzcw==
+  MYSQL_ROOT_PASSWORD: cm9vdA==
+  MYSQL_USER: b21rYXI=
+```
+
+### Deployments
+#### **Iron DB Deployment** (MariaDB)
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: iron-db-deployment-nautilus
+  namespace: iron-namespace-nautilus
+  labels:
+    db: mariadb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      db: mariadb
+  template:
+    metadata:
+      labels:
+        db: mariadb
+    spec:
+      volumes:
+      - name: db
+        emptyDir: {}
+      containers:
+      - name: iron-db-container-nautilus
+        image: kodekloud/irondb:2.0
+        volumeMounts:
+        - name: db
+          mountPath: "/var/lib/mysql"
+        ports:
+          - containerPort: 3306
+        envFrom:
+          - secretRef:
+              name: mysql-secrets
+```
+
+#### **Iron Gallery Deployment**
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: iron-gallery-deployment-nautilus
+  namespace: iron-namespace-nautilus
+  labels:
+    run: iron-gallery
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: iron-gallery
+  template:
+    metadata:
+      labels:
+        run: iron-gallery
+    spec:
+      volumes:
+      - name: config
+        emptyDir: {}
+      - name: images
+        emptyDir: {}
+      containers:
+      - name: iron-gallery-container-nautilus
+        image: kodekloud/irongallery:2.0
+        resources:
+          limits:
+            cpu: "50m"
+            memory: "100Mi"
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: config
+          mountPath: /usr/share/nginx/html/data
+        - name: images
+          mountPath: /usr/share/nginx/html/uploads
+```
+
+### Services
+#### **Iron DB Service (ClusterIP)**
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: iron-db-service-nautilus
+  namespace: iron-namespace-nautilus
+spec:
+  selector:
+    db: mariadb
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
+  type: ClusterIP
+```
+
+#### **Iron Gallery Service (NodePort)**
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: iron-gallery-service-nautilus
+  namespace: iron-namespace-nautilus
+spec:
+  selector:
+    run: iron-gallery
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      nodePort: 32678
+  type: NodePort
+```
+
+## Applying Configurations
+Run the following command to apply all configurations:
+```sh
+kubectl apply -f .
+```
+
+## Verifying Deployment
+1. **Check the running pods**
+   ```sh
+   kubectl get pods -n iron-namespace-nautilus
+   ```
+2. **Check the services**
+   ```sh
+   kubectl get svc -n iron-namespace-nautilus
+   ```
+3. **Check logs if needed**
+   ```sh
+   kubectl logs -f <pod-name> -n iron-namespace-nautilus
+   ```
+
+## Accessing the Application
+- **Database (MariaDB) is only accessible within the cluster** (ClusterIP).
+- **Iron Gallery is accessible externally** using:
+  ```sh
+  minikube service iron-gallery-service-nautilus -n iron-namespace-nautilus
+  ```
+  OR access it via `http://<node-ip>:32678`
+
+
+
 
