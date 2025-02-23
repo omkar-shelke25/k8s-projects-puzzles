@@ -44,5 +44,6 @@ The **Nautilus DevOps** team is deploying tools in a Kubernetes cluster, and som
 
 ## Implementation
 ![image](https://github.com/user-attachments/assets/f817fe66-a636-479c-bfb0-66b4cceca20f)
+![image](https://github.com/user-attachments/assets/f078e124-16ae-40ff-8c8e-93a9d97d239f)
 
 
