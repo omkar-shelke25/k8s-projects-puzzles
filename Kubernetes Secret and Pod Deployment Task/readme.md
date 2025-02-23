@@ -41,3 +41,8 @@ The **Nautilus DevOps** team is deploying tools in a Kubernetes cluster, and som
 **Important Notes:**  
 ✔ Ensure the **pod is in a running state** before validation.  
 ✔ **Verification may take time**, so be patient before checking the task completion.  
+
+## Implementation
+![image](https://github.com/user-attachments/assets/f817fe66-a636-479c-bfb0-66b4cceca20f)
+
+
