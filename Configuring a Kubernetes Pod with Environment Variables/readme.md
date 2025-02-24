@@ -1,19 +1,16 @@
 
 
-# 📋 **Problem Statement: Configuring a Kubernetes Pod with Environment Variables**
+# 📋 **Problem Statement**
 
-We need to define several parameters as environment variables to be used across different configurations in a Kubernetes cluster. Below is the scenario to be implemented.
+There are a number of parameters that are used by the applications. We need to define these as environment variables, so that we can use them as needed within different configs. Below is a scenario which needs to be configured on Kubernetes cluster. Please find below more details about the same.
 
 ---
 
-## 🛠️ **Task: Create a Kubernetes Pod**
+## 🛠️ **Task: Create a Pod**
 
-- **Pod Name**: `envars`  
-- **Container Name**: `fieldref-container`  
-- **Image**: `redis` (latest tag preferred)  
-- **Command**: `sh`, `-c`  
-- **Args**:  
-  ```bash
+Create a pod named envars.  
+- **Container Name**: Container name should be fieldref-container, use image redis preferable latest tag, use command 'sh', '-c' and args should be  
+   ```bash
   while true; do
       echo -en '\n';
       printenv NODE_NAME POD_NAME;
@@ -21,53 +18,34 @@ We need to define several parameters as environment variables to be used across 
       sleep 10;
   done;
   ```  
-  *(Note: Ensure proper indentation in the YAML file)*
+  *(Note: please take care of indentations)*
 
 ---
 
-## 🌍 **Environment Variables Configuration**
+## 🌍 **Environment Variables**
 
-Define the following four environment variables using `valueFrom` and `fieldRef`:
-
-1. **🔧 NODE_NAME**  
-   - Name: `NODE_NAME`  
-   - Value Source: `fieldRef`  
-   - Field Path: `spec.nodeName`
-
-2. **📛 POD_NAME**  
-   - Name: `POD_NAME`  
-   - Value Source: `fieldRef`  
-   - Field Path: `metadata.name`
-
-3. **🌐 POD_IP**  
-   - Name: `POD_IP`  
-   - Value Source: `fieldRef`  
-   - Field Path: `status.podIP`
-
-4. **🔑 POD_SERVICE_ACCOUNT**  
-   - Name: `POD_SERVICE_ACCOUNT`  
-   - Value Source: `fieldRef`  
-   - Field Path: `spec.serviceAccountName`
+Define Four environment variables as mentioned below:  
+1. **🔧 a.)** The first env should be named as NODE_NAME, set valueFrom fieldref and fieldPath should be spec.nodeName.  
+2. **📛 b.)** The second env should be named as POD_NAME, set valueFrom fieldref and fieldPath should be metadata.name.  
+3. **🌐 c.)** The third env should be named as POD_IP, set valueFrom fieldref and fieldPath should be status.podIP.  
+4. **🔑 d.)** The fourth env should be named as POD_SERVICE_ACCOUNT, set valueFrom fieldref and fieldPath shoulbe be spec.serviceAccountName.
 
 ---
 
 ## 🔄 **Restart Policy**
 
-- **Policy**: `Never`
+Set restart policy to Never.
 
 ---
 
-## ✅ **Verification Steps**
+## ✅ **Verification**
 
-- Exec into the pod:  
-  `kubectl exec -it envars -- sh`  
-- Run:  
-  `printenv`  
-- Check the output of the environment variables.
+To check the output, exec into the pod and use printenv command.
 
 ---
 
-## ℹ️ **Additional Notes**
+### ℹ️ **Note**
 
-- The `kubectl` utility on the `jump_host` is already configured to work with the Kubernetes cluster.
+Note: The kubectl utility on jump_host has been configured to work with the kubernetes cluster.
 
+---
