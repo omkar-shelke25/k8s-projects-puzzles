@@ -29,18 +29,47 @@ Define Four environment variables as mentioned below:
 2. **📛 b.)** The second env should be named as POD_NAME, set valueFrom fieldref and fieldPath should be metadata.name.  
 3. **🌐 c.)** The third env should be named as POD_IP, set valueFrom fieldref and fieldPath should be status.podIP.  
 4. **🔑 d.)** The fourth env should be named as POD_SERVICE_ACCOUNT, set valueFrom fieldref and fieldPath shoulbe be spec.serviceAccountName.
-
----
-
-## 🔄 **Restart Policy**
-
-Set restart policy to Never.
+5.🔄 **Restart Policy** :: Set restart policy to Never.
 
 ---
 
 ## ✅ **Verification**
 
-To check the output, exec into the pod and use printenv command.
+You're on the right track! To check the environment variables inside the `envars` pod, you can follow these steps:
+
+### 1️⃣ Check the Pod status  
+First, ensure the pod is running:  
+```sh
+kubectl get pods
+```
+
+### 2️⃣ View logs (Optional)  
+If the pod is already printing environment variables in the logs, check the logs:  
+```sh
+kubectl logs envars
+```
+
+### 3️⃣ Exec into the pod and list environment variables  
+You can use either of the following commands:
+
+- Using `env`:
+  ```sh
+  kubectl exec -it envars -- env
+  ```
+
+- Using `printenv`:
+  ```sh
+  kubectl exec -it envars -- printenv
+  ```
+
+Both commands will list all environment variables inside the pod, including the ones set using `fieldRef`. 🚀
+
+![image](https://github.com/user-attachments/assets/6a640302-0dcd-42e3-a973-8f6bd76e0fcb)
+
+If your pod has multiple containers, specify the container name like this:  
+```sh
+kubectl exec -it envars -c fieldref-container -- printenv
+```
 
 ---
 
