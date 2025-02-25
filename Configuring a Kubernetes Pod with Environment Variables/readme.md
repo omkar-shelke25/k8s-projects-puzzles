@@ -29,7 +29,7 @@ Define Four environment variables as mentioned below:
 2. **📛 b.)** The second env should be named as POD_NAME, set valueFrom fieldref and fieldPath should be metadata.name.  
 3. **🌐 c.)** The third env should be named as POD_IP, set valueFrom fieldref and fieldPath should be status.podIP.  
 4. **🔑 d.)** The fourth env should be named as POD_SERVICE_ACCOUNT, set valueFrom fieldref and fieldPath shoulbe be spec.serviceAccountName.
-5.🔄 **Restart Policy** :: Set restart policy to Never.
+5. 🔄 **Restart Policy** :: Set restart policy to Never.
 
 ---
 
