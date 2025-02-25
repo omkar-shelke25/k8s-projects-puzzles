@@ -72,9 +72,3 @@ kubectl exec -it envars -c fieldref-container -- printenv
 ```
 
 ---
-
-### ℹ️ **Note**
-
-Note: The kubectl utility on jump_host has been configured to work with the kubernetes cluster.
-
----
