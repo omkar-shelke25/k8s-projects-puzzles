@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysql-root-pass
+type: Opaque
+data:
+  password: UjAwdA== # Base64 encoded value of "R00t"
