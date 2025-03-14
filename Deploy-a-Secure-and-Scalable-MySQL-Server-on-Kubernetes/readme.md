@@ -94,9 +94,10 @@ kubectl create secret generic mysql-db-url --from-literal=database='your-databas
 # Create secret for MySQL user credentials
 kubectl create secret generic mysql-user-pass --from-literal=username='your-username' --from-literal=password='your-user-password'
 
-![image](https://github.com/user-attachments/assets/e2c10be1-1656-4dfc-8eb0-a4c568177661)
+
 
 ```
+![image](https://github.com/user-attachments/assets/e2c10be1-1656-4dfc-8eb0-a4c568177661)
 
 ### 2. Create Persistent Volume (PV)
 Create a Persistent Volume with 250Mi capacity:
