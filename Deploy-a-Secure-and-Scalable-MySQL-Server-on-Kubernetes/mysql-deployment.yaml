@@ -1,43 +1,49 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: mysql-deployment
-  labels:
-    app: mysql
-spec:
-  replicas: 3
-  selector:
-    matchLabels:
-      app: mysql
-  template:
-    metadata:
-      labels:
-        app: mysql
-    spec:
-      containers:
-      - name: mysql
-        image: mysql:lts
-        ports:
-        - containerPort: 3306
-        env:
-        - name: MYSQL_ROOT_PASSWORD
+apiVersion: apps/v1              # Specifies the Kubernetes API version
+kind: Deployment                 # Resource type: Deployment
+metadata:                        # Metadata for the Deployment
+  name: mysql-deployment         # Name of the Deployment
+  labels:                        # Labels for identification
+    app: mysql                   # Label: app=mysql
+spec:                            # Specification of the Deployment
+  replicas: 3                    # Number of desired pod replicas
+  selector:                      # Selector to match pods
+    matchLabels:                 # Labels to match
+      app: mysql                 # Matches pods with app=mysql
+  template:                      # Pod template for the Deployment
+    metadata:                    # Metadata for the pods
+      labels:                    # Labels applied to the pods
+        app: mysql               # Pod label: app=mysql
+    spec:                        # Specification for the pod
+      containers:                # List of containers in the pod
+      - name: mysql              # Container name
+        image: mysql:lts         # Container image (MySQL Long Term Support)
+        ports:                   # Ports exposed by the container
+        - containerPort: 3306    # MySQL default port
+        env:                     # Environment variables for the container
+        - name: MYSQL_ROOT_PASSWORD  # Env var for root password
+          valueFrom:             # Value sourced externally
+            secretKeyRef:        # Source is a Secret
+              name: mysql-root-pass  # Secret name
+              key: password      # Key in the Secret
+        - name: MYSQL_DATABASE   # Env var for database name
           valueFrom:
             secretKeyRef:
-              name: mysql-root-pass
-              key: password
-        - name: MYSQL_DATABASE
+              name: mysql-db-url   # Secret name
+              key: database      # Key in the Secret
+        - name: MYSQL_USER       # Env var for MySQL user
           valueFrom:
             secretKeyRef:
-              name: mysql-db-url
-              key: database
-        - name: MYSQL_USER
+              name: mysql-user-pass  # Secret name
+              key: username      # Key in the Secret
+        - name: MYSQL_PASSWORD   # Env var for MySQL password
           valueFrom:
             secretKeyRef:
-              name: mysql-user-pass
-              key: username
-        - name: MYSQL_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: mysql-user-pass
-              key: password
-            
+              name: mysql-user-pass  # Secret name
+              key: password      # Key in the Secret
+        volumeMounts:            # Mounts for the container
+        - name: mysql-volume     # Name of the volume to mount
+          mountPath: /var/lib/mysql  # Mount path inside the container
+      volumes:                   # Volumes available to the pod
+      - name: mysql-volume       # Volume name
+        persistentVolumeClaim:   # Type of volume (PVC)
+          claimName: mysql-pvc   # Name of the Persistent Volume Claim
