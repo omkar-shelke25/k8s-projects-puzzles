@@ -149,7 +149,7 @@ metadata:
   labels:
     app: mysql
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: mysql
@@ -248,8 +248,8 @@ kubectl get svc mysql
 - Storage is set to 250Mi - adjust as needed
 - Uses MySQL Long Term Support (LTS) image
 - Persistent data is stored at `/root/data` on the host
-- Deployment runs 3 replicas for high availability
-```
+- Deployment runs 1 replicas for high availability
+
 
 
 
