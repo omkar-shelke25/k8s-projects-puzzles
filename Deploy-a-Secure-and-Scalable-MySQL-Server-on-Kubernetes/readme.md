@@ -71,3 +71,11 @@ The MySQL container should read credentials securely from the Kubernetes Secrets
 | `MYSQL_USER`                | `secretKeyRef: mysql-user-pass`   | `username`         |  
 | `MYSQL_PASSWORD`            | `secretKeyRef: mysql-user-pass`   | `password`         |  
 
+
+
+
+
+
+![image](https://github.com/user-attachments/assets/e2c10be1-1656-4dfc-8eb0-a4c568177661)
+
+
