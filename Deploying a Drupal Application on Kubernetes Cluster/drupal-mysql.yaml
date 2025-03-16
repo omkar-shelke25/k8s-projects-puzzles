@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: drupal-mysql
+  labels:
+    app: drupal-mysql  # 🏷️ Labels the deployment
+spec:
+  replicas: 1  # 🔢 Ensures 1 instance of MySQL runs
+  selector:
+    matchLabels:
+      app: drupal-mysql  # 🔗 Matches pods with this label
+  template:
+    metadata:
+      labels:
+        app: drupal-mysql  # 🏷️ Labels for the pod
+    spec:
+      volumes:
+      - name: drupal-mysql-volume  # 💾 Volume name for MySQL data
+        persistentVolumeClaim:
+          claimName: drupal-mysql-pvc  # 🔗 Links to the PVC
+      containers:
+      - name: mysql-container  # 📦 Container name
+        image: mysql:5.7  # 🖼️ MySQL image version
+        ports:
+        - containerPort: 3306  # 🔌 Exposes MySQL port
+        volumeMounts:
+        - name: drupal-mysql-volume  # 💾 Mounts the volume
+          mountPath: /var/lib/mysql  # 📍 Mount point for MySQL data
+        env:  # 🌍 Environment variables for MySQL configuration
+        - name: MYSQL_ROOT_PASSWORD
+          value: "your_root_password"  # 🔑 Root password (replace with secure value)
+        - name: MYSQL_DATABASE
+          value: "drupal"  # 🗄️ Database name for Drupal
+        - name: MYSQL_USER
+          value: "drupal_user"  # 👤 Database user
+        - name: MYSQL_PASSWORD
+          value: "your_password"  # 🔒 User password (replace with secure value)
