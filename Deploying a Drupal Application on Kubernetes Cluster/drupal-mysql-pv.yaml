@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: drupal-mysql-pv
+spec:
+  capacity:
+    storage: 5Gi  # 🔍 Defines 5Gi of storage capacity
+  volumeMode: Filesystem  # 📁 Specifies the volume as a filesystem
+  accessModes:
+    - ReadWriteOnce  # ✏️ Allows read/write access by a single node
+  persistentVolumeReclaimPolicy: Recycle  # ♻️ Reclaims space when PVC is deleted
+  storageClassName: manual  # 🛠️ Custom storage class for manual management
+  hostPath:
+    path: /drupal-mysql-data  # 📍 Path on the worker node (jump host)
+    type: DirectoryOrCreate  # 🗂️ Creates the directory if it doesn’t exist
