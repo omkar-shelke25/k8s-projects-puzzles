@@ -40,12 +40,12 @@ The Nautilus Application Development team is tasked with deploying a PHP-based a
         - Copy the file `/opt/index.php` from the jump host to the nginx document root (`/var/www/html`) inside the `nginx` container.
         - Ensure the application is accessible via the "App" button on the top bar after deployment.
 
-### Additional Instructions:
+## Additional Instructions:
 - Use any labels as per your preference for the resources.
 - The `kubectl` utility on the jump host is pre-configured to interact with the Kubernetes cluster.
 - Before finalizing the deployment, verify that all pods are in the `Running` state.
 
-### Deliverables:
+## Deliverables:
 - Kubernetes manifests (YAML files) for the `Service`, `ConfigMap`, and `Pod`.
 - Instructions or commands to copy `/opt/index.php` into the `nginx` container.
 - Confirmation that the application is accessible via the specified `NodePort` (`30012`).
@@ -56,7 +56,7 @@ The Nautilus Application Development team is tasked with deploying a PHP-based a
 
 Below is an example of the Kubernetes manifests based on the problem statement:
 
-#### 1. ConfigMap: `nginx-config`
+### 1. ConfigMap: `nginx-config`
 ```yaml
 apiVersion: v1
 kind: ConfigMap
@@ -80,7 +80,7 @@ data:
     }
 ```
 
-#### 2. Pod: `nginx-phpfpm`
+### 2. Pod: `nginx-phpfpm`
 ```yaml
 apiVersion: v1
 kind: Pod
@@ -113,7 +113,7 @@ spec:
       name: nginx-config
 ```
 
-#### 3. Service: `nginx-phpfpm-service`
+### 3. Service: `nginx-phpfpm-service`
 ```yaml
 apiVersion: v1
 kind: Service
@@ -129,13 +129,13 @@ spec:
     app: nginx-phpfpm
 ```
 
-#### 4. Commands to Copy `index.php`
+### 4. Commands to Copy `index.php`
 After applying the manifests, copy the `index.php` file from the jump host to the `nginx` container:
 ```bash
 kubectl cp /opt/index.php nginx-phpfpm:/var/www/html/index.php -c nginx-container
 ```
 
-#### 5. Verification
+### 5. Verification
 - Apply the manifests:
   ```bash
   kubectl apply -f configmap.yaml
@@ -146,5 +146,6 @@ kubectl cp /opt/index.php nginx-phpfpm:/var/www/html/index.php -c nginx-containe
   ```bash
   kubectl get pods
   ```
+![image](https://github.com/user-attachments/assets/d14f7b1c-5f77-4cab-ad56-e67b5aef1f2e)
 - Ensure the pod `nginx-phpfpm` is in the `Running` state before proceeding.
 
