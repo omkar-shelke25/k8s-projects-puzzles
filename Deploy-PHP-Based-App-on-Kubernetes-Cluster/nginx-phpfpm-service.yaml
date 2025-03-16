@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-phpfpm-service
+  # 🌍 Exposes the application externally
+spec:
+  type: NodePort                   # 🔗 NodePort service type
+  ports:
+  - port: 8092                    # 🔌 Internal service port
+    targetPort: 8092              # 🎯 Targets nginx container port
+    nodePort: 30012               # 🌐 External access port
+  selector:
+    app: nginx-phpfpm             # 🏷️ Matches pod label
