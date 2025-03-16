@@ -257,9 +257,3 @@ kubectl logs <mysql-pod-name>  # 📜 Check MySQL logs (e.g., drupal-mysql-54d7b
 
 ---
 
-## 🎉 Conclusion
-This setup deploys a fully functional Drupal application on Kubernetes with MySQL persistence. Verify the deployment using the provided commands and access the Drupal installation page via the "App" button or NodePort URL.
-
-
----
-
