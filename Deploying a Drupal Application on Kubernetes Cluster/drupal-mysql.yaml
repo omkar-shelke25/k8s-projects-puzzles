@@ -28,10 +28,10 @@ spec:
           mountPath: /var/lib/mysql  # 📍 Mount point for MySQL data
         env:  # 🌍 Environment variables for MySQL configuration
         - name: MYSQL_ROOT_PASSWORD
-          value: "your_root_password"  # 🔑 Root password (replace with secure value)
+          value: "root"  # 🔑 Root password (replace with secure value)
         - name: MYSQL_DATABASE
           value: "drupal"  # 🗄️ Database name for Drupal
         - name: MYSQL_USER
           value: "drupal_user"  # 👤 Database user
         - name: MYSQL_PASSWORD
-          value: "your_password"  # 🔒 User password (replace with secure value)
+          value: "omkara25"  # 🔒 User password (replace with secure value)
