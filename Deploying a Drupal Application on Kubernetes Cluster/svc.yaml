@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: drupal-service  # 📛 Service name
+spec:
+  selector:
+    app: drupal  # 🔗 Targets Drupal deployment pods
+  type: NodePort  # 🌍 Exposes service externally via NodePort
+  ports:
+  - name: name-of-drupal-service-port  # 📌 Port name
+    protocol: TCP  # 📡 Protocol type
+    port: 80  # 🔌 Service port
+    targetPort: 80  # 🎯 Container port
+    nodePort: 30095  # 🌐 External port accessible on the node
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: drupal-mysql-service  # 📛 Service name
+spec:
+  selector:
+    app: drupal-mysql  # 🔗 Targets MySQL deployment pods
+  type: ClusterIP  # 🔒 Internal service (default type)
+  ports:
+  - name: name-of-drupal-mysql-service-port  # 📌 Port name
+    protocol: TCP  # 📡 Protocol type
+    port: 3306  # 🔌 Service port
+    targetPort: 3306  # 🎯 Container port
