@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: drupal
+  labels:
+    app: drupal  # 🏷️ Labels the deployment
+spec:
+  replicas: 1  # 🔢 Ensures 1 instance of Drupal runs
+  selector:
+    matchLabels:
+      app: drupal  # 🔗 Matches pods with this label
+  template:
+    metadata:
+      labels:
+        app: drupal  # 🏷️ Labels for the pod
+    spec:
+      containers:
+      - name: drupal-container  # 📦 Container name
+        image: drupal:8.6  # 🖼️ Drupal image version
+        ports:
+        - containerPort: 80  # 🔌 Exposes HTTP port for Drupal
