@@ -147,5 +147,7 @@ kubectl cp /opt/index.php nginx-phpfpm:/var/www/html/index.php -c nginx-containe
   kubectl get pods
   ```
 ![image](https://github.com/user-attachments/assets/d14f7b1c-5f77-4cab-ad56-e67b5aef1f2e)
+![image](https://github.com/user-attachments/assets/3d61cdd6-9722-4ca9-97d1-1aa784e0e424)
+
 - Ensure the pod `nginx-phpfpm` is in the `Running` state before proceeding.
 
