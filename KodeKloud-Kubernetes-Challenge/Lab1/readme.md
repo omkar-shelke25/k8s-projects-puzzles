@@ -6,7 +6,8 @@ The objective is to deploy a Jekyll Static Site Generator (SSG) application with
 
 The following diagram illustrates the architecture of the Jekyll SSG deployment, highlighting the relationships between the pod, service, storage, and RBAC components:
 
-![Jekyll SSG Architecture Diagram](https://github.com/user-attachments/assets/fcf02f63-3d4e-4b7f-9b69-c9e5ccd13318)
+![image](https://github.com/user-attachments/assets/8de5e144-4bdb-4299-9dcc-7f3f9f75648a)
+
 
 1. **User and Kubeconfig Configuration** 🔑:
    - Configure a user named `martin` in the default kubeconfig file, utilizing a client key at `/root/martin.key` and a client certificate at `/root/martin.crt`. These files must be referenced externally, not embedded in the kubeconfig.
