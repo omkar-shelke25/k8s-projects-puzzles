@@ -6,7 +6,8 @@ The objective is to deploy a Jekyll Static Site Generator (SSG) application with
 
 The following diagram illustrates the architecture of the Jekyll SSG deployment, highlighting the relationships between the pod, service, storage, and RBAC components:
 
-![image](https://github.com/user-attachments/assets/8de5e144-4bdb-4299-9dcc-7f3f9f75648a)
+![image](https://github.com/user-attachments/assets/a9c00968-97c1-468c-b4bd-ecb2691febd3)
+
 
 
 1. **User and Kubeconfig Configuration** 🔑:
