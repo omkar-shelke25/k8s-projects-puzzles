@@ -279,8 +279,14 @@ kubectl apply -f manifests/05-service.yaml
    ```bash
    kubectl get all,pvc,role,rolebinding -n development
    ```
+ ![image](https://github.com/user-attachments/assets/0fcd5d30-6c51-43ff-97cd-1ce418cd9368)
 
 4. **Access**:
    - External: `http://<node-ip>:30097`
 
+5. **Final Output** ::
+   ![image](https://github.com/user-attachments/assets/8f3db44d-afd0-4465-abdb-3f7da218a02d)
+
 ---
+
+
