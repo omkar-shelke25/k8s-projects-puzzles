@@ -8,5 +8,5 @@ kubectl config set-context developer \
   --cluster=kubernetes \
   --namespace=development
 
-#Implement After creation Of 
+#Implement After creation Of role and role binding
 #kubectl config use-context developer
