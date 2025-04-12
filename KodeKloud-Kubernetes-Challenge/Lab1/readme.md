@@ -77,80 +77,13 @@ To deploy the Jekyll Static Site Generator (SSG) application as per the provided
 
 ## Project Structure
 
-We'll organize the configuration files in a directory named `jekyll-deployment` with the following structure:
+first we set use credinatils
+k config set-credentials martin --client-key=/root/martin.key --client-certificate=/root/martin.crt
 
-```
-jekyll-deployment/
-├── kubeconfig/
-│   └── kubeconfig.yaml         📜
-├── manifests/
-│   ├── namespace.yaml         🏷️
-│   ├── rbac.yaml             🔒
-│   ├── pvc.yaml              💾
-│   ├── pod.yaml              🛠️
-│   └── service.yaml          🌐
-└── README.md                 📖
-```
+And update user details in kubeconfig
+k config set-context developer --namespace=development --user=martin --cluster=kubernetes
 
-- **`kubeconfig/`**: Contains the kubeconfig file for user configuration.
-- **`manifests/`**: Contains Kubernetes resource definitions.
-- **`README.md`**: Provides instructions for deployment.
-
----
-
-## Step-by-Step Configuration
-
-### 1. Kubeconfig Setup (`kubeconfig.yaml`) 📜
-
-This file configures the user `martin`, sets up the `developer` context, and references the provided key and certificate files.
-
-```yaml
-# kubeconfig/kubeconfig.yaml
-apiVersion: v1
-kind: Config
-clusters:
-- cluster:
-    server: https://kubernetes.default.svc
-    certificate-authority: /path/to/ca.crt  # Adjust to your cluster's CA
-  name: kubernetes
-users:
-- name: martin
-  user:
-    client-certificate: /root/martin.crt
-    client-key: /root/martin.key
-contexts:
-- context:
-    cluster: kubernetes
-    namespace: development
-    user: martin
-  name: developer
-current-context: developer
-```
-
-**Notes**:
-- Replace `/path/to/ca.crt` with the actual path to your cluster's CA certificate.
-- The `client-certificate` and `client-key` paths point to `/root/martin.crt` and `/root/martin.key` as specified.
-- The `developer` context is set as the current context, targeting the `development` namespace.
-
-### 2. Namespace (`namespace.yaml`) 🏷️
-
-Create the `development` namespace to house all resources.
-
-```yaml
-# manifests/namespace.yaml
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: development
-```
-
-### 3. RBAC Configuration (`rbac.yaml`) 🔒
-
-Define the `developer-role` and `developer-rolebinding` to grant `martin` the required permissions.
-
-```yaml
-# manifests/rbac.yaml
----
+then we assigned role to user
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
@@ -160,12 +93,13 @@ rules:
 - apiGroups: [""]
   resources: ["services", "persistentvolumeclaims", "pods"]
   verbs: ["*"]
----
+
+
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  namespace: development
   name: developer-rolebinding
+  namespace: development
 subjects:
 - kind: User
   name: martin
@@ -174,95 +108,6 @@ roleRef:
   kind: Role
   name: developer-role
   apiGroup: rbac.authorization.k8s.io
-```
 
-**Notes**:
-- The `Role` grants full permissions (`*`) to `services`, `persistentvolumeclaims`, and `pods`.
-- The `RoleBinding` associates the `developer-role` with the user `martin`.
-
-### 4. Persistent Volume Claim (`pvc.yaml`) 💾
-
-Create the `jekyll-pvc` (aliased as `jekyll-site`) for persistent storage.
-
-```yaml
-# manifests/pvc.yaml
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  namespace: development
-  name: jekyll-pvc
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi  # Adjust size as needed
-  storageClassName: standard  # Adjust to your cluster's storage class
-```
-
-**Notes**:
-- The PVC is named `jekyll-pvc` and will be referenced as `jekyll-site` in the pod.
-- Assumes a `standard` storage class; modify based on your cluster's configuration.
-- The size (`1Gi`) is a placeholder; adjust as needed.
-
-### 5. Pod Configuration (`pod.yaml`) 🛠️
-
-Define the `jekyll` pod with the init and main containers, using the `jekyll-site` volume.
-
-```yaml
-# manifests/pod.yaml
-apiVersion: v1
-kind: Pod
-metadata:
-  namespace: development
-  name: jekyll
-  labels:
-    run: jekyll
-spec:
-  initContainers:
-  - name: copy-jekyll-site
-    image: gcr.io/kodekloud/customimage/jekyll
-    command: ["jekyll", "new", "/site"]
-    volumeMounts:
-    - name: site
-      mountPath: /site
-  containers:
-  - name: jekyll
-    image: gcr.io/kodekloud/customimage/jekyll-serve
-    volumeMounts:
-    - name: site
-      mountPath: /site
-  volumes:
-  - name: site
-    persistentVolumeClaim:
-      claimName: jekyll-pvc
-```
-
-**Notes**:
-- The init container (`copy-jekyll-site`) generates a new Jekyll site at `/site`.
-- The main container (`jekyll`) serves the site, mounting the same `/site` path.
-- The `site` volume uses the `jekyll-pvc` PVC for persistence.
-- The pod is labeled `run=jekyll` for service selection.
-
-### 6. Service Configuration (`service.yaml`) 🌐
-
-Expose the `jekyll` pod via a `NodePort` service.
-
-```yaml
-# manifests/service.yaml
-apiVersion: v1
-kind: Service
-metadata:
-  namespace: development
-  name: jekyll
-spec:
-  type: NodePort
-  ports:
-  - port: 8080
-    targetPort: 4000
-    nodePort: 30097
-  selector:
-    run: jekyll
-```
-
-
+set context 'developer' with user = 'martin' and cluster = 'kubernetes' as the current context.
+kubectl config use-context developer
