@@ -70,20 +70,61 @@ The implementation must adhere to Kubernetes best practices, ensuring accurate r
 
 --- 
 
-
-To deploy the Jekyll Static Site Generator (SSG) application as per the provided architecture and requirements, I'll guide you through creating the necessary Kubernetes configuration files, ensuring proper organization and clarity. Below is a structured approach with YAML files, explanations, and a README to set up the deployment in the `development` namespace. The files will include appropriate icons for clarity in the README.
+To deploy the Jekyll Static Site Generator (SSG) application on Kubernetes as per the requirements, I'll provide a streamlined solution with kubeconfig setup and Kubernetes YAML manifests, assuming the `development` namespace already exists (removing the namespace manifest) and updating the Persistent Volume Claim (PVC) to use `ReadWriteMany` access mode. Below are the updated configuration files and deployment steps.
 
 ---
 
 ## Project Structure
 
-first we set use credinatils
-k config set-credentials martin --client-key=/root/martin.key --client-certificate=/root/martin.crt
+```
+jekyll-k8s-deployment/
+├── kubeconfig/
+│   └── setup-kubeconfig.sh
+├── manifests/
+│   ├── 01-role.yaml
+│   ├── 02-rolebinding.yaml
+│   ├── 03-pvc.yaml
+│   ├── 04-pod.yaml
+│   └── 05-service.yaml
+└── apply-all.sh
+```
 
-And update user details in kubeconfig
-k config set-context developer --namespace=development --user=martin --cluster=kubernetes
+---
 
-then we assigned role to user
+## Solution
+
+### 1. Kubeconfig Configuration
+
+**File: `kubeconfig/setup-kubeconfig.sh`**
+
+```bash
+#!/bin/bash
+kubectl config set-credentials martin \
+  --client-key=/root/martin.key \
+  --client-certificate=/root/martin.crt
+
+kubectl config set-context developer \
+  --user=martin \
+  --cluster=kubernetes \
+  --namespace=development
+
+kubectl config use-context developer
+```
+
+**Purpose**:
+- Configures user `martin` with external key and certificate.
+- Sets the `developer` context for the `kubernetes` cluster and `development` namespace.
+- Activates the `developer` context.
+
+---
+
+### 2. Kubernetes Manifests
+
+#### 2.1 Role
+
+**File: `manifests/01-role.yaml`**
+
+```yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
@@ -93,13 +134,21 @@ rules:
 - apiGroups: [""]
   resources: ["services", "persistentvolumeclaims", "pods"]
   verbs: ["*"]
+```
 
+**Purpose**:
+- Grants full permissions to `services`, `persistentvolumeclaims`, and `pods` in the `development` namespace.
 
+#### 2.2 Role Binding
+
+**File: `manifests/02-rolebinding.yaml`**
+
+```yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: developer-rolebinding
   namespace: development
+  name: developer-rolebinding
 subjects:
 - kind: User
   name: martin
@@ -108,22 +157,136 @@ roleRef:
   kind: Role
   name: developer-role
   apiGroup: rbac.authorization.k8s.io
+```
 
-set context 'developer' with user = 'martin' and cluster = 'kubernetes' as the current context.
-kubectl config use-context developer
+**Purpose**:
+- Binds `developer-role` to user `martin`.
 
+#### 2.3 Persistent Volume Claim
 
+**File: `manifests/03-pvc.yaml`**
+
+```yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  namespace: development
+  name: jekyll-site
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+```
+
+**Purpose**:
+- Defines `jekyll-site` PVC with `ReadWriteMany` access mode for multi-pod access.
+- Requests 1Gi storage.
+
+#### 2.4 Pod
+
+**File: `manifests/04-pod.yaml`**
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  namespace: development
+  name: jekyll
+  labels:
+    run: jekyll
+spec:
+  initContainers:
+  - name: copy-jekyll-site
+    image: gcr.io/kodekloud/customimage/jekyll
+    command: ["jekyll", "new", "/site"]
+    volumeMounts:
+    - name: site
+      mountPath: /site
+  containers:
+  - name: jekyll
+    image: gcr.io/kodekloud/customimage/jelly-serve
+    ports:
+    - containerPort: 4000
+    volumeMounts:
+    - name: site
+      mountPath: /site
+  volumes:
+  - name: site
+    persistentVolumeClaim:
+      claimName: jekyll-site
+```
+
+**Purpose**:
+- Runs an init container to generate the Jekyll site.
+- Runs a main container to serve the site on port `4000`.
+- Uses `jekyll-site` PVC for persistent storage.
+
+#### 2.5 Service
+
+**File: `manifests/05-service.yaml`**
+
+```yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: jekyll
   namespace: development
+  name: jekyll
 spec:
   selector:
-    app: jekyll  # Assumes pods have the label 'app: jekyll'
+    run: jekyll
   ports:
   - protocol: TCP
     port: 8080
     targetPort: 4000
     nodePort: 30097
   type: NodePort
+```
+
+**Purpose**:
+- Exposes the `jekyll` pod internally on port `8080` and externally on `nodePort: 30097`.
+
+---
+
+### 3. Deployment Script
+
+**File: `apply-all.sh`**
+
+```bash
+#!/bin/bash
+kubectl apply -f manifests/01-role.yaml
+kubectl apply -f manifests/02-rolebinding.yaml
+kubectl apply -f manifests/03-pvc.yaml
+kubectl apply -f manifests/04-pod.yaml
+kubectl apply -f manifests/05-service.yaml
+```
+
+**Purpose**:
+- Applies all manifests in order.
+
+---
+
+## Deployment Steps
+
+1. **Set up kubeconfig**:
+   ```bash
+   chmod +x kubeconfig/setup-kubeconfig.sh
+   ./kubeconfig/setup-kubeconfig.sh
+   ```
+
+2. **Apply manifests**:
+   ```bash
+   chmod +x apply-all.sh
+   ./apply-all.sh
+   ```
+
+3. **Verify**:
+   ```bash
+   kubectl get all,pvc,role,rolebinding -n development
+   ```
+
+4. **Access**:
+   - External: `http://<node-ip>:30097`
+
+---
