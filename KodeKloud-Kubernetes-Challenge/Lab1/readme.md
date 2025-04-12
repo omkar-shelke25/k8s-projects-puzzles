@@ -101,8 +101,8 @@ kubectl config set-context developer \
   --user=martin \
   --cluster=kubernetes \
   --namespace=development
-
-kubectl config use-context developer
+# implement below command after creation of role and role binding
+#kubectl config use-context developer
 ```
 
 **Purpose**:
