@@ -111,3 +111,19 @@ roleRef:
 
 set context 'developer' with user = 'martin' and cluster = 'kubernetes' as the current context.
 kubectl config use-context developer
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: jekyll
+  namespace: development
+spec:
+  selector:
+    app: jekyll  # Assumes pods have the label 'app: jekyll'
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 4000
+    nodePort: 30097
+  type: NodePort
