@@ -8,4 +8,5 @@ kubectl config set-context developer \
   --cluster=kubernetes \
   --namespace=development
 
-kubectl config use-context developer
+#Implement After creation Of 
+#kubectl config use-context developer
