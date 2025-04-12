@@ -66,12 +66,6 @@ The deployment must achieve the following:
 - **Accessibility**: Expose the application through the `jekyll` service, accessible within the cluster and externally via the specified NodePort (`30097`).
 - **Resource Organization**: Deploy all resources correctly in the `development` namespace, ensuring a cohesive and functional application environment.
 
-The implementation must adhere to Kubernetes best practices, ensuring accurate resource definitions, secure user authentication, and reliable storage management to deliver a fully operational Jekyll SSG application.
-
---- 
-
-To deploy the Jekyll Static Site Generator (SSG) application on Kubernetes as per the requirements, I'll provide a streamlined solution with kubeconfig setup and Kubernetes YAML manifests, assuming the `development` namespace already exists (removing the namespace manifest) and updating the Persistent Volume Claim (PVC) to use `ReadWriteMany` access mode. Below are the updated configuration files and deployment steps.
-
 ---
 
 ## Project Structure
