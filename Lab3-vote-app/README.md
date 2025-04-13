@@ -30,6 +30,8 @@ Ensure all deployments are in a `Running` state and services correctly expose th
 
 
 ## final output
+k get all -n vote
+![image](https://github.com/user-attachments/assets/57171854-9c13-4728-96fa-a61ae3a3d49a)
 
 ## voting user ui
 ![image](https://github.com/user-attachments/assets/7fbc8777-c00b-47e6-ad1e-f1a151ce7e0d)
