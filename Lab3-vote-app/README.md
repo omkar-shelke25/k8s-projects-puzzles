@@ -27,3 +27,14 @@ Ensure all deployments are in a `Running` state and services correctly expose th
 
 ## Architecture Vote App
  ![image](https://github.com/user-attachments/assets/28ec7667-2873-4ceb-8eec-a986c5e1905c)
+
+
+## final output
+
+## voting user ui
+![image](https://github.com/user-attachments/assets/7fbc8777-c00b-47e6-ad1e-f1a151ce7e0d)
+
+## voting result ui
+![image](https://github.com/user-attachments/assets/4c664e75-f77c-4a6d-baa6-b17c83509096)
+
+
