@@ -283,7 +283,7 @@ spec:
 4. **Voting User ui**
 ![image](https://github.com/user-attachments/assets/7fbc8777-c00b-47e6-ad1e-f1a151ce7e0d)
 
-5. **Voting User Ui**
+5. **Voting Result Ui**
 ![image](https://github.com/user-attachments/assets/4c664e75-f77c-4a6d-baa6-b17c83509096)
 
 
