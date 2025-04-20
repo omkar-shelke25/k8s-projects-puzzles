@@ -10,6 +10,10 @@ The architecture is illustrated in the following diagram:
 
 The diagram depicts the StatefulSet (`redis-cluster`), 6 pods (`redis-cluster-0` to `redis-cluster-5`), PersistentVolumes (`redis01` to `redis06`), ConfigMap (`redis-cluster-configmap`), and the service (`redis-cluster-service`) exposing client and gossip ports.
 
+
+![image](https://github.com/user-attachments/assets/b902f062-07d0-46a1-96da-3889efa9a123)
+
+
 ## Requirements
 
 ### StatefulSet Configuration
