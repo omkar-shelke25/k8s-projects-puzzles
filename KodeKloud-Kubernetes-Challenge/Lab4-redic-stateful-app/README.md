@@ -4,11 +4,16 @@
 
 Design and deploy a highly available Redis cluster on Kubernetes using a StatefulSet to ensure stable, scalable, and persistent data storage for a distributed caching system. The cluster must support 6 replicas, each running Redis 5.0.1, with persistent storage and proper network configurations for client and gossip communications.
 
-## Diagram
+## Diagram Details
 
-The architecture is illustrated in the following diagram:
+The diagram illustrates:
 
-The diagram depicts the StatefulSet (`redis-cluster`), 6 pods (`redis-cluster-0` to `redis-cluster-5`), PersistentVolumes (`redis01` to `redis06`), ConfigMap (`redis-cluster-configmap`), and the service (`redis-cluster-service`) exposing client and gossip ports.
+- **StatefulSet**: Manages 6 pods (`redis-cluster-0` to `redis-cluster-5`) with stable identities.
+- **Pods**: Each contains a Redis container with ports `6379` (client) and `16379` (gossip).
+- **Persistent Storage**: Each pod is linked to a dedicated PersistentVolume (`redis01` to `redis06`) via a PVC, ensuring data persistence.
+- **ConfigMap**: `redis-cluster-configmap` provides configuration files to all pods, mounted at `/conf`.
+- **Service**: `redis-cluster-service` exposes ports `6379` and `16379` for external client access and internal cluster communication.
+- **Network Flow**: Pods communicate internally via gossip protocol (`16379`) and serve clients via the service (`6379`).
 
 
 ![image](https://github.com/user-attachments/assets/b902f062-07d0-46a1-96da-3889efa9a123)
@@ -79,17 +84,6 @@ The diagram depicts the StatefulSet (`redis-cluster`), 6 pods (`redis-cluster-0`
 
 - **Purpose**: Initialize the Redis cluster with one replica per primary node (3 primary, 3 replica nodes).
 
-## Diagram Details
-
-The diagram illustrates:
-
-- **StatefulSet**: Manages 6 pods (`redis-cluster-0` to `redis-cluster-5`) with stable identities.
-- **Pods**: Each contains a Redis container with ports `6379` (client) and `16379` (gossip).
-- **Persistent Storage**: Each pod is linked to a dedicated PersistentVolume (`redis01` to `redis06`) via a PVC, ensuring data persistence.
-- **ConfigMap**: `redis-cluster-configmap` provides configuration files to all pods, mounted at `/conf`.
-- **Service**: `redis-cluster-service` exposes ports `6379` and `16379` for external client access and internal cluster communication.
-- **Network Flow**: Pods communicate internally via gossip protocol (`16379`) and serve clients via the service (`6379`).
-
 ## Challenges
 
 1. **Persistence**: Ensure each pod has a dedicated PersistentVolume with the correct hostPath directory created on the worker node.
@@ -105,3 +99,7 @@ The diagram illustrates:
 - The Redis cluster is initialized with 3 primary nodes and 3 replicas, verified via `redis-cli cluster info`.
 - The `redis-cluster-service` exposes ports `6379` and `16379` for client and gossip communications.
 - The system handles pod failures gracefully, maintaining data persistence and cluster integrity.
+
+
+![image](https://github.com/user-attachments/assets/9c540b64-a605-4286-9a89-83549929576c)
+
