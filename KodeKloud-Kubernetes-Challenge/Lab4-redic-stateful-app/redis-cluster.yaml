@@ -14,11 +14,13 @@ spec:
         app: redis-cluster # has to match .spec.selector.matchLabels
     spec:
       containers:
-      - name: nginx
-        image: registry.k8s.io/nginx-slim:0.24
+      - name: redis
+        image: redis:5.0.1-alpine
         ports:
-        - containerPort: 80
-          name: web
+        - name: client
+          containerPort: 6379
+        - containerPort: 16379
+          name: gossip
         volumeMounts:
         - name: www
           mountPath: /usr/share/nginx/html
@@ -31,4 +33,3 @@ spec:
       resources:
         requests:
           storage: 1Gi
-~                        
