@@ -28,6 +28,12 @@ spec:
         - name: data
           mountPath: /data
           readOnly: false
+        env:
+        - name: POD_IP
+          valueFrom: 
+            fieldRef:
+              fieldPath: status.podIP
+      
   volumeClaimTemplates:
   - metadata:
       name: www
