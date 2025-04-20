@@ -22,8 +22,12 @@ spec:
         - containerPort: 16379
           name: gossip
         volumeMounts:
-        - name: www
-          mountPath: /usr/share/nginx/html
+        - name: conf
+          mountPath: /conf
+          readOnly: false
+        - name: data
+          mountPath: /data
+          readOnly: false
   volumeClaimTemplates:
   - metadata:
       name: www
