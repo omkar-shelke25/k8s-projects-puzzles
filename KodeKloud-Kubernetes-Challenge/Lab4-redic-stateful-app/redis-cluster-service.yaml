@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: redis-cluster-service
 spec:
-  ClusterIP: None
+  clusterIP: None
   ports:
     - name: client
       port: 6379
