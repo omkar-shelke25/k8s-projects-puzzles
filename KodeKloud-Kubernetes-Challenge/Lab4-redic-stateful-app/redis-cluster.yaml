@@ -17,6 +17,7 @@ spec:
       - name: conf
         configMap:
           name: redis-cluster-configmap
+          defaultMode: 0755
       containers:
       - name: redis
         image: redis:5.0.1-alpine
@@ -41,10 +42,10 @@ spec:
       
   volumeClaimTemplates:
   - metadata:
-      name: www
+      name: data
     spec:
       accessModes: [ "ReadWriteOnce" ]
-      storageClassName: "my-storage-class"
+      storageClassName: local-storage
       resources:
         requests:
           storage: 1Gi
